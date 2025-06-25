@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace ProgPart3
-{
+{//code
     public partial class MainWindow : Window
     {
         private readonly ChatbotInterface chatbotInterface;

@@ -44,6 +44,43 @@ namespace ProgPart3
                 sendClickPlayer = new SoundPlayer(sendClickPath);
         }
 
+        // ✅ Add this emoji formatting method below your constructor
+        private string FormatEmojis(string message)
+        {
+            var emojiColors = new Dictionary<string, string>
+    {
+        { "🎉", "Orange" },
+        { "🧠", "LightBlue" },
+        { "⚠️", "Yellow" },
+        { "❌", "Red" },
+        { "✅", "Green" },
+        { "💡", "DeepSkyBlue" },
+        { "📚", "MediumPurple" },
+        { "🛡️", "DodgerBlue" },
+        { "🧱", "OrangeRed" },
+        { "🔄", "MediumVioletRed" },
+        { "🔐", "DarkCyan" },
+        { "👥", "MediumPurple" },
+        { "🕵️‍♂️", "Gold" },
+        { "🧪", "Tomato" },
+        { "📶", "DarkOrange" },
+        { "🔍", "SkyBlue" },
+        { "📚", "OliveDrab" },
+        { "🗃", "Sienna" },
+        { "🧠", "MediumSeaGreen" },
+        { "🧩", "MediumSlateBlue" },
+        { "🚨", "Crimson" },
+        { "📝", "Peru" },
+        { "📋", "SteelBlue" }
+    };
+
+            foreach (var pair in emojiColors)
+            {
+                message = message.Replace(pair.Key, $"<Run Foreground=\"{pair.Value}\">{pair.Key}</Run>");
+            }
+
+            return message;
+        }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             PlayIntroAudio();
@@ -85,6 +122,7 @@ namespace ProgPart3
                     isAskingName = false;
                     AddBotMessage($"🎉 Welcome {userName}! Would you like to learn about cybersecurity topics? (yes/no)");
                     return;
+
                 }
                 catch (ArgumentException ex)
                 {
@@ -93,14 +131,26 @@ namespace ProgPart3
                 }
             }
 
+
             if (quizActive)
             {
                 HandleQuizAnswer(input);
                 return;
             }
 
+
             string lowInput = input.ToLower();
 
+           
+            if (lowInput == "menu")
+            {
+                AppendAsciiArtWithMenu();
+                AddBotMessage("Please select a topic to learn more.");
+                waitingForTopic = true;
+                return;
+            }
+
+            // Existing postQuizPrompt logic
             if (postQuizPrompt)
             {
                 postQuizPrompt = false;
@@ -117,6 +167,7 @@ namespace ProgPart3
                     return;
                 }
             }
+
 
             if (lowInput.Contains("definition") || lowInput.Contains("learn") || lowInput.Contains("menu") || lowInput.Contains("topic") || Regex.IsMatch(lowInput, "^\\d+$"))
             {
@@ -162,22 +213,36 @@ namespace ProgPart3
         }
 
         private void StartQuiz()
-        {
-            quizQuestions = CybersecurityQuestions.GetRandomQuizSet(5, 5);
-            quizActive = true;
-            quizIndex = 0;
-            quizScore = 0;
-            AskQuizQuestion();
-        }
+        { }
+            private void ProcessInput(string input)
+        
+            {
+                if (!quizActive)
+                {
+                    quizActive = true;
+                    quizIndex = 0;
+                    quizScore = 0;
+                    AddBotMessage("🧠 Starting the Cybersecurity Quiz! Let's begin:");
+                    AskQuizQuestion(); // This will ask the first question
+                }
+                else
+                {
+                    AddBotMessage("⚠️ You're already taking the quiz. Please answer the current question.");
+                }
+                return;
+            }
+
+       
 
 
         private void AskQuizQuestion()
         {
             if (quizIndex >= quizQuestions.Count)
             {
-                EndQuiz();
+                EndQuiz(); // Ends the quiz and shows score
                 return;
             }
+
 
             var q = quizQuestions[quizIndex];
             string questionText = $"Question {quizIndex + 1}: {q.Question}\n";
@@ -196,11 +261,7 @@ namespace ProgPart3
             var q = quizQuestions[quizIndex];
             input = input.ToUpper();
 
-            if (input.Length != 1 || input[0] < 'A' || input[0] >= 'A' + q.Options.Count)
-            {
-                AddBotMessage("Please answer with the letter corresponding to your choice (e.g., A, B, C, or D).");
-                return;
-            }
+            
 
             int chosenIndex = input[0] - 'A';
 
@@ -244,6 +305,7 @@ namespace ProgPart3
             AddBotMessage("Would you like to see the topic definitions again? (yes/no)");
             postQuizPrompt = true;
         }
+
 
         // ... rest of the code unchanged (AddUserMessage, AddBotMessage, etc.)
 

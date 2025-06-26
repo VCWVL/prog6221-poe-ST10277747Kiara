@@ -766,6 +766,36 @@ namespace PartProg3
         //If the user wants more information about a topic they simply type in "want more advice on topic , instead of topic use a word from the menu list e.g. like phishing
         //" and more advice is given 
 
+        private string FormatEmojis(string message)
+        {
+            var emojiColors = new Dictionary<string, string>
+    {
+        { "🛡️", "DodgerBlue" },
+        { "🧱", "OrangeRed" },
+        { "🔄", "MediumVioletRed" },
+        { "🔐", "DarkCyan" },
+        { "👥", "MediumPurple" },
+        { "🕵️‍♂️", "Gold" },
+        { "🧪", "Tomato" },
+        { "📶", "DarkOrange" },
+        { "🔍", "SkyBlue" },
+        { "📚", "OliveDrab" },
+        { "⚠️", "Yellow" },
+        { "🗃", "Sienna" },
+        { "🧠", "MediumSeaGreen" },
+        { "🧩", "MediumSlateBlue" },
+        { "🚨", "Crimson" },
+        { "📝", "Peru" },
+        { "📋", "SteelBlue" }
+    };
+
+            foreach (var pair in emojiColors)
+            {
+                message = message.Replace(pair.Key, $"<Run Foreground=\"{pair.Value}\">{pair.Key}</Run>");
+            }
+
+            return message;
+        }
 
         public string GenerateAnswer(string question, string name, string interest)
         {

@@ -6,50 +6,111 @@ namespace ProgPart3
 {
     public static class CybersecurityQuestions
     {
-        // Multiple-choice question bank
-        private static readonly List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> multipleChoice = new()
+        // Quiz data: T/F and Multiple Choice
+        private static readonly List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> questionPool = new()
         {
-            ("What is phishing?", new() { "A type of firewall", "An email scam", "A secure password", "A malware virus" }, 1, "Phishing is a scam where attackers trick people via emails."),
-            ("What does 2FA stand for?", new() { "Two-Factor Authentication", "Two Firewall Access", "Twice Fast Authorization", "Top File Access" }, 0, "2FA adds an extra step of security beyond just a password."),
-            ("Which of these is a strong password?", new() { "123456", "qwerty", "Summer2023!", "password" }, 2, "Strong passwords mix letters, numbers, and symbols."),
-            ("What is ransomware?", new() { "A software update", "A firewall feature", "Malware that demands payment", "A type of backup" }, 2, "Ransomware locks your files and demands money."),
-            ("Which one is a safe browsing habit?", new() { "Clicking unknown links", "Using HTTPS websites", "Ignoring software updates", "Sharing personal info on public WiFi" }, 1, "HTTPS ensures secure communication online."),
-            ("Which is a recommended way to back up data?", new() { "USB only", "Cloud + local", "CD-ROM", "No backup needed" }, 1, "Using both cloud and local backups is safest."),
-            ("What does encryption do?", new() { "Deletes data", "Scrambles data to protect it", "Stores data offline", "Makes files larger" }, 1, "Encryption secures data by encoding it."),
-            ("Which device can be hacked?", new() { "Smartphone", "Smart TV", "Laptop", "All of the above" }, 3, "Any smart device connected to the internet can be hacked."),
-            ("Which tool helps prevent network attacks?", new() { "Notepad", "Firewall", "Task Manager", "Recycle Bin" }, 1, "Firewalls block unauthorized network access."),
-            ("Which action improves password safety?", new() { "Using the same password everywhere", "Writing it on a sticky note", "Using a password manager", "Never changing it" }, 2, "Password managers store strong passwords securely.")
+            // Multiple Choice
+            (
+                "What should you do if you receive an email asking for your password?",
+                new List<string> { "Reply with your password", "Delete the email", "Report it as phishing", "Ignore it" },
+                2,
+                "You should never share your password via email. Reporting phishing emails helps protect others."
+            ),
+            (
+                "Which of the following is NOT a strong password?",
+                new List<string> { "P@ssw0rd123", "123456", "8&*aB!9", "A mix of letters, numbers, and symbols" },
+                1,
+                "Simple sequences like '123456' are easy to guess and are considered weak passwords."
+            ),
+            (
+                "What does two-factor authentication (2FA) provide?",
+                new List<string> { "Only a username and password", "Two passwords", "An additional layer of security", "Faster login" },
+                2,
+                "2FA adds an extra security step beyond passwords, like a code or fingerprint."
+            ),
+            (
+                "What type of malware locks your files and demands payment?",
+                new List<string> { "Virus", "Ransomware", "Spyware", "Adware" },
+                1,
+                "Ransomware encrypts your files and demands a ransom to unlock them."
+            ),
+            (
+                "What is the main purpose of a firewall?",
+                new List<string> { "To monitor network traffic", "To increase internet speed", "To block unauthorized access", "To store passwords" },
+                2,
+                "Firewalls are used to block unauthorized access while allowing safe traffic."
+            ),
+            (
+                "Which of these is an example of social engineering?",
+                new List<string> { "Phishing email", "Antivirus scan", "Software update", "Two-factor authentication" },
+                0,
+                "Phishing is a social engineering tactic used to trick users into giving information."
+            ),
+
+            // True/False
+            (
+                "Phishing is a technique to trick users into giving sensitive info. True or False?",
+                new List<string> { "True", "False" },
+                0,
+                "Phishing involves fraudulent attempts to obtain personal or financial information."
+            ),
+            (
+                "Using the same password on multiple sites is safe. True or False?",
+                new List<string> { "True", "False" },
+                1,
+                "Using the same password puts all accounts at risk if one is breached."
+            ),
+            (
+                "Software updates help protect your computer from vulnerabilities. True or False?",
+                new List<string> { "True", "False" },
+                0,
+                "Updates patch security holes that could be exploited by hackers."
+            ),
+            (
+                "Public WiFi is always secure for sensitive transactions. True or False?",
+                new List<string> { "True", "False" },
+                1,
+                "Public WiFi can be intercepted, making it unsafe for sensitive tasks."
+            )
         };
 
-        // True/False question bank
-        private static readonly List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> trueFalse = new()
+        private static readonly Random rng = new();
+
+        // ✅ Get a randomized 10-question quiz
+        public static List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> GetAlternatingQuizSet(int numberOfQuestions = 10)
         {
-            ("Using 'password' as your password is safe.", new() { "True", "False" }, 1, "Common passwords are very insecure."),
-            ("You should update your software regularly.", new() { "True", "False" }, 0, "Updates fix bugs and patch security holes."),
-            ("Hackers never target mobile phones.", new() { "True", "False" }, 1, "Mobile phones can be hacked too."),
-            ("Firewalls can help block malicious traffic.", new() { "True", "False" }, 0, "Firewalls filter incoming and outgoing traffic."),
-            ("Cybersecurity is only the IT department's job.", new() { "True", "False" }, 1, "Everyone plays a role in cybersecurity."),
-            ("Backing up your data is optional.", new() { "True", "False" }, 1, "Regular backups are essential to avoid data loss."),
-            ("Clicking pop-ups is a safe practice.", new() { "True", "False" }, 1, "Pop-ups can often be malicious."),
-            ("Public Wi-Fi is always safe to use.", new() { "True", "False" }, 1, "Avoid entering sensitive info on public Wi-Fi."),
-            ("Antivirus software can help detect malware.", new() { "True", "False" }, 0, "Antivirus scans for and removes threats."),
-            ("Cyberbullying is not related to cybersecurity.", new() { "True", "False" }, 1, "It is a digital safety issue tied to cybersecurity.")
+            if (numberOfQuestions > questionPool.Count)
+                throw new ArgumentException($"Only {questionPool.Count} questions available.");
+
+            return questionPool.OrderBy(_ => rng.Next()).Take(numberOfQuestions).ToList();
+        }
+
+        // ✅ NLP Keyword Detection Helper
+        private static readonly Dictionary<string, List<string>> keywordMap = new()
+        {
+            { "phishing", new List<string> { "phishing", "fraud email", "scam link", "phish" } },
+            { "password", new List<string> { "password", "credentials", "login code", "auth" } },
+            { "firewall", new List<string> { "firewall", "network block", "packet filter", "access control" } },
+            { "ransomware", new List<string> { "ransomware", "file locked", "encrypted files", "ransom demand" } },
+            { "2fa", new List<string> { "2fa", "two factor", "multi factor", "code verification" } },
+            { "wifi", new List<string> { "wifi", "public network", "wireless", "hotspot" } },
+            { "update", new List<string> { "update", "patch", "upgrade", "software fix" } },
+            { "social engineering", new List<string> { "social engineering", "deceive", "trick", "manipulate" } }
         };
 
-        /// <summary>
-        /// Returns a randomized mix of MCQ and T/F quiz questions.
-        /// </summary>
-        /// <param name="mcqCount">Number of multiple-choice questions</param>
-        /// <param name="tfCount">Number of true/false questions</param>
-        /// <returns>List of combined quiz questions</returns>
-        public static List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> GetRandomQuizSet(int mcqCount, int tfCount)
+        // ✅ Detect matched keyword topic in a sentence (for NLP part 3.c, 3.d)
+        public static string? DetectTopicFromInput(string input)
         {
-            var random = new Random();
-
-            var selectedMCQ = multipleChoice.OrderBy(_ => random.Next()).Take(mcqCount).ToList();
-            var selectedTF = trueFalse.OrderBy(_ => random.Next()).Take(tfCount).ToList();
-
-            return selectedMCQ.Concat(selectedTF).ToList();
+            string lower = input.ToLower();
+            foreach (var pair in keywordMap)
+            {
+                foreach (var keyword in pair.Value)
+                {
+                    if (lower.Contains(keyword))
+                        return pair.Key;
+                }
+            }
+            return null; // No match
         }
     }
 }

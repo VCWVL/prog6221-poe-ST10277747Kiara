@@ -122,7 +122,6 @@ namespace ProgPart3
                     isAskingName = false;
                     AddBotMessage($"🎉 Welcome {userName}! Would you like to learn about cybersecurity topics? (yes/no)");
                     return;
-
                 }
                 catch (ArgumentException ex)
                 {
@@ -131,17 +130,28 @@ namespace ProgPart3
                 }
             }
 
+            string lowInput = input.ToLower();
 
+            // ✅ Handle quiz answer
             if (quizActive)
             {
                 HandleQuizAnswer(input);
                 return;
             }
 
+            // ✅ Always start a fresh quiz if user types "quiz"
+            if (lowInput == "quiz")
+            {
+                quizQuestions = CybersecurityQuestions.GetAlternatingQuizSet(10);
+                quizIndex = 0;
+                quizScore = 0;
+                quizActive = true;
 
-            string lowInput = input.ToLower();
+                AddBotMessage("🧠 Starting the Cybersecurity Quiz! Let's begin:");
+                AskQuizQuestion();
+                return;
+            }
 
-           
             if (lowInput == "menu")
             {
                 AppendAsciiArtWithMenu();
@@ -150,7 +160,6 @@ namespace ProgPart3
                 return;
             }
 
-            // Existing postQuizPrompt logic
             if (postQuizPrompt)
             {
                 postQuizPrompt = false;
@@ -159,15 +168,13 @@ namespace ProgPart3
                     AppendAsciiArtWithMenu();
                     AddBotMessage("Great! Please select a topic to learn more.");
                     waitingForTopic = true;
-                    return;
                 }
                 else
                 {
                     AddBotMessage("Alright! You can always type 'menu' or a topic name later.");
-                    return;
                 }
+                return;
             }
-
 
             if (lowInput.Contains("definition") || lowInput.Contains("learn") || lowInput.Contains("menu") || lowInput.Contains("topic") || Regex.IsMatch(lowInput, "^\\d+$"))
             {
@@ -188,11 +195,6 @@ namespace ProgPart3
                 AddBotMessage("Okay! You can always type 'quiz' to start the cybersecurity quiz or 'menu' to see topic list.");
                 return;
             }
-            else if (lowInput == "quiz")
-            {
-                StartQuiz();
-                return;
-            }
 
             if (waitingForTopic)
             {
@@ -204,6 +206,7 @@ namespace ProgPart3
             AddBotMessage(response);
         }
 
+
         private void HandleTopicRequest(string input)
         {
             string topicResponse = chatbotInterface.GenerateAnswer(input);
@@ -213,55 +216,58 @@ namespace ProgPart3
         }
 
         private void StartQuiz()
-        { }
-            private void ProcessInput(string input)
-        
+        {
+            if (!quizActive)
             {
-                if (!quizActive)
-                {
-                    quizActive = true;
-                    quizIndex = 0;
-                    quizScore = 0;
-                    AddBotMessage("🧠 Starting the Cybersecurity Quiz! Let's begin:");
-                    AskQuizQuestion(); // This will ask the first question
-                }
-                else
-                {
-                    AddBotMessage("⚠️ You're already taking the quiz. Please answer the current question.");
-                }
+                quizQuestions = CybersecurityQuestions.GetAlternatingQuizSet(6); // alternate 6 questions
+                quizIndex = 0;
+                quizScore = 0;
+                quizActive = true;
+
+                AddBotMessage("🧠 Starting the Cybersecurity Quiz! Let's begin:");
+                AskQuizQuestion();
+
+                return; // ✅ prevents fall-through to HandleQuizAnswer("quiz")
+            }
+            else
+            {
+                AddBotMessage("⚠️ You're already taking the quiz. Please answer the current question.");
                 return;
             }
+        }
 
-       
 
 
         private void AskQuizQuestion()
         {
             if (quizIndex >= quizQuestions.Count)
             {
-                EndQuiz(); // Ends the quiz and shows score
+                EndQuiz();
                 return;
             }
 
+            var current = quizQuestions[quizIndex];
+            AddBotMessage($"Question {quizIndex + 1}: {current.Question}");
 
-            var q = quizQuestions[quizIndex];
-            string questionText = $"Question {quizIndex + 1}: {q.Question}\n";
 
-            for (int i = 0; i < q.Options.Count; i++)
-            {
-                char optionChar = (char)('A' + i);
-                questionText += $"{optionChar}) {q.Options[i]}\n";
-            }
-
-            AddBotMessage(questionText.Trim());
+            // True/False doesn't need A/B format
+            AddBotMessage($"Type: {string.Join(" or ", current.Options)}");
         }
+
+
 
         private void HandleQuizAnswer(string input)
         {
-            var q = quizQuestions[quizIndex];
-            input = input.ToUpper();
+            if (quizIndex >= quizQuestions.Count)
+            {
+                EndQuiz();
+                return;
+            }
 
-            
+            var q = quizQuestions[quizIndex];
+            input = input.Trim().ToUpper();
+
+            if (string.IsNullOrEmpty(input)) return;
 
             int chosenIndex = input[0] - 'A';
 
@@ -269,28 +275,28 @@ namespace ProgPart3
             {
                 quizScore++;
                 AddBotMessage($"✅ Correct! {q.Explanation}");
+
+                quizIndex++;
+
+                if (quizIndex < quizQuestions.Count)
+                {
+                    AddBotMessage("👉 Next question coming up...");
+                    AskQuizQuestion(); // continue quiz
+                }
+                else
+                {
+                    EndQuiz();
+                }
             }
             else
             {
+                quizActive = false; // break the quiz
                 AddBotMessage($"❌ Incorrect. {q.Explanation}");
-            }
-
-            quizIndex++;
-
-            if (quizIndex == 2)
-            {
-                AddBotMessage("Would you like to learn more about cybersecurity? (yes/no)");
-                waitingForTopic = true;
-                quizActive = false;
-                return;
-            }
-
-            if (quizIndex == quizQuestions.Count)
-            {
-                EndQuiz();
-                return;
+                AddBotMessage("Would you like another quiz question? (type 'quiz') or go back to the menu (type 'menu')");
             }
         }
+
+
 
         private void EndQuiz()
         {
@@ -475,6 +481,7 @@ namespace ProgPart3
 
         private void PlayIntroAudio()
         {
+
             if (hasPlayedIntroAudio) return;
 
             try

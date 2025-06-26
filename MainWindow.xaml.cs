@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PartProg3;
+using System;
 using System.Media;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace ProgPart3
-{//code
+{
     public partial class MainWindow : Window
     {
         private readonly ChatbotInterface chatbotInterface;
@@ -21,7 +23,7 @@ namespace ProgPart3
 
         private int quizIndex = 0;
         private int quizScore = 0;
-        private readonly System.Collections.Generic.List<(string Question, System.Collections.Generic.List<string> Options, int CorrectIndex, string Explanation)> quizQuestions = CybersecurityQuestions.GetQuizQuestions();
+        private List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> quizQuestions = new();
 
         private static bool hasPlayedIntroAudio = false;
         private SoundPlayer introPlayer = null;
@@ -63,6 +65,7 @@ namespace ProgPart3
                 e.Handled = true;
             }
         }
+
 
         private void ProcessUserInput()
         {
@@ -160,11 +163,13 @@ namespace ProgPart3
 
         private void StartQuiz()
         {
+            quizQuestions = CybersecurityQuestions.GetRandomQuizSet(5, 5);
             quizActive = true;
             quizIndex = 0;
             quizScore = 0;
             AskQuizQuestion();
         }
+
 
         private void AskQuizQuestion()
         {
@@ -219,10 +224,11 @@ namespace ProgPart3
                 return;
             }
 
-            if (quizIndex < quizQuestions.Count)
-                AskQuizQuestion();
-            else
+            if (quizIndex == quizQuestions.Count)
+            {
                 EndQuiz();
+                return;
+            }
         }
 
         private void EndQuiz()
@@ -403,6 +409,7 @@ namespace ProgPart3
 
             AddBubbleWithAnimation(border);
         }
+
 
         private void PlayIntroAudio()
         {

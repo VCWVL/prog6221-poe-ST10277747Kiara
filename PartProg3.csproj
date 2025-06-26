@@ -8,4 +8,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="ElevenLabs_Text_to_Speech_audio.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ElevenLabs_Text_to_Speech_audio.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

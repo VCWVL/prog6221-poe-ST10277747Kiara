@@ -7,8 +7,11 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Header -->
             <RowDefinition Height="*"/>
+            <!-- Chat Area -->
             <RowDefinition Height="Auto"/>
+            <!-- Input Area -->
         </Grid.RowDefinitions>
 
         <!-- Header -->
@@ -24,27 +27,31 @@
             </TextBlock.Effect>
         </TextBlock>
 
-        <!-- Chat Area -->
-        <ScrollViewer Grid.Row="1" Name="ChatScrollViewer" VerticalScrollBarVisibility="Auto"
-                      Background="#181818" Margin="5" Padding="10">
+        <!-- Chat Display Area -->
+        <ScrollViewer Grid.Row="1"
+                      Name="ChatScrollViewer"
+                      VerticalScrollBarVisibility="Auto"
+                      Background="#181818"
+                      Margin="5,15,30,24"
+                      Padding="10">
             <StackPanel Name="ChatStackPanel"/>
         </ScrollViewer>
 
         <!-- Input Area -->
         <DockPanel Grid.Row="2" Margin="5">
             <TextBox Name="InputTextBox"
-                     MinHeight="40"
-                     FontSize="16"
-                     Padding="10"
-                     Background="#222"
-                     Foreground="White"
-                     BorderBrush="Aqua"
-                     BorderThickness="1"
-                     KeyDown="InputTextBox_KeyDown"
-                     DockPanel.Dock="Left"
-                     Width="600"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"/>
+         MinHeight="40"
+         FontSize="16"
+         Padding="10"
+         Background="#222"
+         Foreground="White"
+         BorderBrush="Aqua"
+         BorderThickness="1"
+         KeyDown="InputTextBox_KeyDown"
+         VerticalAlignment="Center"
+         DockPanel.Dock="Left"
+         Width="600"
+         HorizontalAlignment="Left"/>
 
             <Button Name="SubmitButton"
                     Content="Send"

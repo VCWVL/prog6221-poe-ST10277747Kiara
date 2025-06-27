@@ -47,6 +47,8 @@ PartProg3 is a desktop chatbot application built with C# and WPF using .NET 9.0.
 ## 👩‍💻 Author and Module
 
 Developed by **Kiara Israel** as part of the PROG6221 Advanced Programming module, focusing on building an intelligent chatbot to promote cybersecurity awareness through engaging user interaction.
+This project showcases a full-featured WPF desktop chatbot that doesn’t just inform — it teaches, quizzes, tracks, and supports users on their cybersecurity journey.
 
+Thank you for your time. I’d be happy to answer any questions.
 ---
 

@@ -341,7 +341,7 @@ if (lowInput.Contains("show more log") || lowInput.Contains("more actions"))
                 AddBotMessage($"📝 Task added: '{task.Title}'. Would you like me to remind you about it later?");
                 activityLog.Add($"📝 Task created: {task.Title}");
                 return;
-            }
+            }//tasks
 
             // ✅ NLP: "What have you done for me" or "summary"
             if (lowInput.Contains("what have you done") || lowInput.Contains("summary"))

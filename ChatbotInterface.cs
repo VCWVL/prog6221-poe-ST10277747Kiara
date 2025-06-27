@@ -1,5 +1,4 @@
 ﻿using PartProg3;
-
 using System;
 using System.Text.RegularExpressions;
 
@@ -39,7 +38,7 @@ namespace PartProg3
         public string GenerateAnswer(string question)
         {
             if (string.IsNullOrWhiteSpace(question))
-                return "😕 Hmm, I didn’t catch that. Could you try asking again?";
+                return $"😕 {Name}, I didn’t catch that. Could you try asking again?";
 
             question = question.Trim().ToLower();
 
@@ -47,12 +46,12 @@ namespace PartProg3
             if (question == "more" || question == "tell me more")
             {
                 if (string.IsNullOrEmpty(lastTopic))
-                    return "❓ There's no topic selected yet. Try asking about something like 'phishing' or 'encryption' first.";
+                    return $"❓ {Name}, there's no topic selected yet. Try asking about something like 'phishing' or 'encryption' first.";
 
                 detailLevel++;
 
                 if (detailLevel > 3)
-                    return "📚 You've seen all the details I have on that topic.";
+                    return $"📚 {Name}, you've seen all the details I have on that topic.";
 
                 return GetMoreInfo(lastTopic, detailLevel);
             }
@@ -67,12 +66,12 @@ namespace PartProg3
             // Detect sentiment
             string sentiment = DetectSentiment(question);
             if (sentiment == "negative")
-                return "😟 I'm sorry you're feeling that way. Cybersecurity can be frustrating, but I'm here to help!";
+                return $"😟 {Name}, I'm sorry you're feeling that way. Cybersecurity can be frustrating, but I'm here to help!";
             if (sentiment == "positive")
-                return "😊 I'm glad to hear that! Let’s keep you safe online.";
+                return $"😊 {Name}, I'm glad to hear that! Let’s keep you safe online.";
 
             // 📤 Call the chatbot's main generator
-            string response = _chatbot.GenerateAnswer(question, Name, UserInterest);
+            string initialResponse = _chatbot.GenerateAnswer(question, Name, UserInterest);
 
             // 🧠 Detect the topic from the question
             string topic = ExtractTopicFrom(question);
@@ -82,8 +81,29 @@ namespace PartProg3
                 detailLevel = 1;
             }
 
+            // Process the response to personalize and handle fallback messages
+            string finalResponse = ProcessChatbotResponse(initialResponse, question);
+
+            return finalResponse;
+        }
+
+        public string ProcessChatbotResponse(string initialResponse, string userInput)
+        {
+            string response = initialResponse;
+
             if (string.IsNullOrWhiteSpace(response) || response.Contains("I'm not sure"))
+            {
+                if (string.IsNullOrWhiteSpace(response))
+                {
+                    response = $"**Hi {Name}, I didn't find a matching topic for \"{userInput}\".**";
+                }
+                else
+                {
+                    response = $"**Hi {Name}**, {response.Replace("I'm not sure", "I'm not sure what you mean by that")}";
+                }
+
                 response += "\n🤔 Try asking about a specific topic like phishing, firewalls, or password safety.";
+            }
 
             return response;
         }
@@ -100,7 +120,7 @@ namespace PartProg3
         {
             string lowered = input.ToLower();
             string[] positiveWords = { "thank", "great", "awesome", "cool", "good", "helpful", "appreciate" };
-            string[] negativeWords = { "bad", "terrible", "hate", "annoying", "useless", "frustrated", "stupid" };
+            string[] negativeWords = { "bad", "terrible", "hate", "annoying", "useless", "frustrated", "stupid", "sad" };
 
             foreach (var word in positiveWords)
                 if (lowered.Contains(word)) return "positive";

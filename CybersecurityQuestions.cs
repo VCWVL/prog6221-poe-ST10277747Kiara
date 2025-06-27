@@ -6,77 +6,77 @@ namespace ProgPart3
 {
     public static class CybersecurityQuestions
     {
-        // Quiz data: T/F and Multiple Choice
+        // Updated and unique cybersecurity quiz questions
         private static readonly List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> questionPool = new()
         {
-            // Multiple Choice
+            // MULTIPLE CHOICE
             (
-                "What should you do if you receive an email asking for your password?",
-                new List<string> { "Reply with your password", "Delete the email", "Report it as phishing", "Ignore it" },
+                "You're browsing the internet and a pop-up claims your device is infected. What’s the best action?",
+                new List<string> { "Click the link to scan", "Restart the device", "Close the pop-up and run your own antivirus", "Call the number provided" },
                 2,
-                "You should never share your password via email. Reporting phishing emails helps protect others."
+                "Pop-ups with scare tactics often lead to scams. Always use trusted antivirus tools instead of following suspicious prompts."
             ),
             (
-                "Which of the following is NOT a strong password?",
-                new List<string> { "P@ssw0rd123", "123456", "8&*aB!9", "A mix of letters, numbers, and symbols" },
+                "Which of the following behaviors is the most secure when using a public computer?",
+                new List<string> { "Saving passwords in the browser", "Using incognito mode", "Logging into personal bank accounts", "Leaving sessions open for speed" },
                 1,
-                "Simple sequences like '123456' are easy to guess and are considered weak passwords."
+                "Incognito mode prevents the browser from storing history or credentials, which adds a layer of privacy on public machines."
             ),
             (
-                "What does two-factor authentication (2FA) provide?",
-                new List<string> { "Only a username and password", "Two passwords", "An additional layer of security", "Faster login" },
+                "Which practice improves your security posture the most?",
+                new List<string> { "Using a long password only", "Changing passwords monthly", "Using a password manager", "Writing down passwords in a notebook" },
                 2,
-                "2FA adds an extra security step beyond passwords, like a code or fingerprint."
+                "A password manager creates and stores complex passwords securely, helping reduce reuse and guessable passwords."
             ),
             (
-                "What type of malware locks your files and demands payment?",
-                new List<string> { "Virus", "Ransomware", "Spyware", "Adware" },
+                "A friend sends you a strange message with a link. What’s your safest move?",
+                new List<string> { "Click to see what it is", "Reply and ask", "Open it in another browser", "Avoid clicking and contact them another way" },
+                3,
+                "It’s safer to verify the message through another method. Friends’ accounts can be compromised and used to spread malware."
+            ),
+            (
+                "Which situation is an example of credential stuffing?",
+                new List<string> { "Guessing a password", "Using leaked logins to access accounts", "Phishing scam", "Creating weak passwords" },
                 1,
-                "Ransomware encrypts your files and demands a ransom to unlock them."
-            ),
-            (
-                "What is the main purpose of a firewall?",
-                new List<string> { "To monitor network traffic", "To increase internet speed", "To block unauthorized access", "To store passwords" },
-                2,
-                "Firewalls are used to block unauthorized access while allowing safe traffic."
-            ),
-            (
-                "Which of these is an example of social engineering?",
-                new List<string> { "Phishing email", "Antivirus scan", "Software update", "Two-factor authentication" },
-                0,
-                "Phishing is a social engineering tactic used to trick users into giving information."
+                "Credential stuffing involves using leaked username/password combinations across sites to gain unauthorized access."
             ),
 
-            // True/False
+            // TRUE / FALSE
             (
-                "Phishing is a technique to trick users into giving sensitive info. True or False?",
+                "Emails that start with 'Dear Customer' instead of your name might be suspicious. True or False?",
                 new List<string> { "True", "False" },
                 0,
-                "Phishing involves fraudulent attempts to obtain personal or financial information."
+                "Generic greetings are common in phishing emails because attackers don’t know your personal details."
             ),
             (
-                "Using the same password on multiple sites is safe. True or False?",
-                new List<string> { "True", "False" },
-                1,
-                "Using the same password puts all accounts at risk if one is breached."
-            ),
-            (
-                "Software updates help protect your computer from vulnerabilities. True or False?",
+                "A secure website always starts with 'https' and shows a lock icon. True or False?",
                 new List<string> { "True", "False" },
                 0,
-                "Updates patch security holes that could be exploited by hackers."
+                "While not foolproof, HTTPS indicates encrypted communication and is essential for safety—especially on login pages."
             ),
             (
-                "Public WiFi is always secure for sensitive transactions. True or False?",
+                "It's okay to install software from unknown websites if it’s free. True or False?",
                 new List<string> { "True", "False" },
                 1,
-                "Public WiFi can be intercepted, making it unsafe for sensitive tasks."
+                "Free software from unverified sources may contain malware or unwanted programs. Always use official download sites."
+            ),
+            (
+                "Cybersecurity is only the responsibility of the IT department. True or False?",
+                new List<string> { "True", "False" },
+                1,
+                "Everyone plays a role in cybersecurity—weak links in everyday behavior are often the cause of breaches."
+            ),
+            (
+                "Enabling biometric authentication (like a fingerprint) is safer than typing your password. True or False?",
+                new List<string> { "True", "False" },
+                0,
+                "Biometrics are harder to replicate than passwords, adding a strong layer of identity protection."
             )
         };
 
         private static readonly Random rng = new();
 
-        // ✅ Get a randomized 10-question quiz
+        // ✅ Get a randomized quiz set
         public static List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> GetAlternatingQuizSet(int numberOfQuestions = 10)
         {
             if (numberOfQuestions > questionPool.Count)
@@ -98,7 +98,7 @@ namespace ProgPart3
             { "social engineering", new List<string> { "social engineering", "deceive", "trick", "manipulate" } }
         };
 
-        // ✅ Detect matched keyword topic in a sentence (for NLP part 3.c, 3.d)
+        // ✅ Detect matched keyword topic in a sentence
         public static string? DetectTopicFromInput(string input)
         {
             string lower = input.ToLower();
@@ -110,7 +110,7 @@ namespace ProgPart3
                         return pair.Key;
                 }
             }
-            return null; // No match
+            return null;
         }
     }
 }

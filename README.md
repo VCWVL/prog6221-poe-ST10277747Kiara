@@ -44,6 +44,9 @@ PartProg3 is a desktop chatbot application built with C# and WPF using .NET 9.0.
 - **TaskManager.cs & Task.cs:** Manage user tasks and reminders.
 - **ActivityLogger.cs:** Records recent user and chatbot actions.
 
+Video Of Code Explanation and Running Code Explanation:
+https://youtu.be/9cDex5zfg5A
+
 ## 👩‍💻 Author and Module
 
 Developed by **Kiara Israel** as part of the PROG6221 Advanced Programming module, focusing on building an intelligent chatbot to promote cybersecurity awareness through engaging user interaction.

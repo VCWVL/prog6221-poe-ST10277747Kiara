@@ -1,34 +1,29 @@
 name: C# Build and Syntax Check
 
 on:
-   push:
-     branches: ["master"] # Change to branch you pushed code too
-   pull_request:
-   
+  push:
+    branches: ["master"]
+  pull_request:
     branches: ["master"]
 
 jobs:
- build:
-   runs-on: ubuntu-latest # Uses a VM Runner
+  build:
+    runs-on: windows-latest
 
-   steps:
-    - name: Checkout Code # Clones the Repo
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    # Setup SDK.NET
-    - name: Setup SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '9.0' # Change to framework used
+      - name: Setup SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
 
-    # Restore Dependancies
-    - name: Restore Dependancies
-      run: dotnet restore
-     
-    # Run Unit Tests
-    - name: Unit Tests
-      run: dotnet test
+      - name: Restore Dependencies
+        run: dotnet restore
 
-    # Build the project
-    - name: Build
-      run: dotnet build --configuration Release
+      - name: Unit Tests
+        run: dotnet test
+
+      - name: Build
+        run: dotnet build --configuration Release

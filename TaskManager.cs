@@ -27,7 +27,7 @@ public class Task
         string status = IsCompleted ? "✅ Completed" : "❌ Pending";
         return $"{Title} - {Description} (Reminder: {Reminder:g}) [{status}]";
     }
-}
+}// task class
 
 public class TaskManager
 {

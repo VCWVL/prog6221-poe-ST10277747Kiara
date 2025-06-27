@@ -9,7 +9,7 @@ namespace ProgPart3
         // Updated and unique cybersecurity quiz questions
         private static readonly List<(string Question, List<string> Options, int CorrectIndex, string Explanation)> questionPool = new()
         {
-            // MULTIPLE CHOICE
+            // MULTIPLE CHOICE//for quiz
             (
                 "You're browsing the internet and a pop-up claims your device is infected. What’s the best action?",
                 new List<string> { "Click the link to scan", "Restart the device", "Close the pop-up and run your own antivirus", "Call the number provided" },
